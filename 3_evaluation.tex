@@ -1,0 +1,208 @@
+\todoLg{all of evaluation is of course also new.}
+
+\subsection{Experimental Data}
+    % \todoPi{EVALUATION IS BELOW..................}
+    % \subsubsection{Sourcing a Dataset} \hfill \\
+    \todo{jess suggestion: move some stuff to methods section?}
+    In pursuit of a more representative difficulty metric for minesweeper fields, we must first source an objective ranking of fields, which can be cross-referenced for asserting correctness.
+    
+    When evaluating the field's challenge, simply the position of the mines is enough to estimate difficulty, however our aims necessitate data rich enough to recreate the individual moves made by the player in order to permit looking at how the player solves the discrete instances of the minesweeper Inference problem which comprise the full solve.
+    
+    Since there was no dataset fit for this purpose that was readily available, we collected playthroughs ourselves. This was achieved through a simple website, which presented the user with the typical experiment brief, debrief, instructions, and of course an implementation of the game itself.
+    
+    The implementation gave users one of the pre-selected maps (see \cref{table:pre-selected maps}), Tracked and recorded the type and timestamp of moves (cell reveals, flags, chords, restarts) and submitted them to a database together with anonymised user information, the map ID, and playthrough timestamp.
+    
+    % \subsubsection{Dataset Processing} \hfill \\
+    To process the dataset, a RAC implementation similar to the one demonstrated by \citet{minesweeperNConsistencyAssist} was implemented to produce a final dataset where each move on each playthrough on each map is annotated with the corresponding "difficulty", given simply by the $m$ parameter necessary for RAC to deduce the move.
+    
+\subsection{Experimental Analysis}
+    Our experimental analysis is split into 2 parts: field conclusions drawn from players, and player conclusions drawn from fields.
+    Both field and player conclusions are viewed with respect to a ranking metric, where the metric is 3BV and player time advantage (as defined later in \ref{definePlayerSkill}) respectively.
+    For these categories, we look at a selection of statistics which are chosen intentionally to ensure specific phenomena can be caught in analysis (if they indeed occur).
+    
+    \todo{eventually cut down the list of statistics.. right now they are more for personal reference thinking about what's worth including}
+    \subsubsection{\textbf{statistics on Fields}} \hfill \\
+        note: for every "statistic on a field" we could theoretically also compute them while filtering only to the solves of a specific person.
+        this could be a step in the direction of "user-specific" map difficulty,
+        however the problem is that I dont have the data to do this for every participant.
+        also, even in an ideal system with every participant, this would only work on players which are dedicated. But, this may be fine since only the dedicated players would even be interested in this in the first place.
+
+        \begin{enumerate}
+            \item different maps having different randomly generated difficulties \\
+            per-map distribution of move difficulties. \\
+            also: for a specific map, a heatmap of the typical difficulty for each cell
+        
+            \item different maps having different minimum-skill requirements \\
+            percentage completion
+            
+            \item different moves having different "payoffs" (with some moves being more useful to make than others) \\
+            per-map move entropy heatmap
+        
+            \item \todo{number of moves to solve}
+            
+            \item \todo{number of moves to solve AS PERCENTAGE OF 3BV}
+            
+            \item "entry" points to solution. if there are multiple ways to solve, then the field is easy. if there is only one direction that leads to solving, then it's hard. \todo{write up why this is the end-goal, and why it's infeasible for me rn}
+            
+            \item \todo{heatmap of guesses}
+        \end{enumerate}
+    
+    \subsubsection{\textbf{statistics on players}} \hfill \\
+        \begin{enumerate}
+            \item (experienced) players intentionally "skipping" easy moves for hard moves \\
+            $\rightarrow$ player's percentage of moves (across all moves on any attempt on any field) where the player chose a further, harder, move when there was a nearby, easier, move available. (\todo{connect with cell entropy})
+        
+            \item (naive) players accidentally skipping hard moves because they're unaware \\
+            $\rightarrow$ player's percentage of moves (across all moves on any attempt on any field) where the player chose a further, easier, move when there was a nearby, easier, move available. (\todo{connect with cell entropy})
+            
+            \item players playing faster or slower (according to skill) \\
+            $rightarrow$ simply, a player's average time to make a move (across all moves on any attempt on any field).
+            
+            % \item (experienced) players placing a "hard" flag, so they can use a chord more efficiently \\
+            % $\uparrow$ should be more common in low 3bv fields? high 3bv fields require many clicks by nature so there's less benefit to flagging. \\
+            % $\rightarrow$ \todo{unimplemented}
+        
+            \item what action is taken when there's no lvl 1. moves available? \\
+            $\rightarrow$ unimplemented and I dont understand what I was thinking
+        
+            \item more/less experienced players having more refined mechanics
+            $\rightarrow$ average time spent per move difficulty. \\
+        \end{enumerate}
+    
+    \subsubsection{\textbf{analysis methodology}} \hfill \\
+        \todo{redo everything in evaluation :)} \\
+        First, we need to test whether RAC actually corresponds to human minesweeping. \\
+        we start with hypotheses stemming from anecdotal experience, and confirm/deny these using data. the more hypotheses get proven, the better RAC correlates?
+        
+        From review of submitted playthroughs and other ad-hoc playing, we identified a selection of phenomena that are either broadly important or demonstrate nuanced but interesting behaviour.
+        Behaviour which, when viewed through a hypothetical "ideal" difficulty algorithm, should be discernible.
+        
+        These phenomena (in the form of hypotheses to be proven or disproven), together with their implementation as some statistic, are as follows:
+        
+        \begin{enumerate}
+            \item \todo{"experienced" (i.e. difficulty actually encountered) difficulty through the solve}
+            \item \todo{"experienced" (i.e. entropy actually used) entropy through the solve}
+            
+    \end{enumerate}
+    
+    \subsubsection{\textbf{analysis conclusion}} \hfill \\
+        We can then look at some corresponding surface-level metrics which would be expected to reveal the corresponding phenomena.
+        
+        After applying these algorithms to the playthrough data, we can see the following trends: \\
+        better people do indeed play faster \\
+        ...
+        correlations to look at:
+        \begin{itemize}
+            \item average times with 3bv
+            \item 3bv with "difficulty"
+            \item entropy with 3bv
+        \end{itemize}
+        
+        oops ok I've looked at corelations, and I've found that 3bv is strongly corelated with time to solve
+        which is contradictory.
+        
+        what is the problem? I only used one of each 3bv.
+        why did I do this? because the original idea of this project wasnt focused on corelating solve time with 3bv, but instead solve time with 3bv across different player skills.
+    
+    \subsubsection{\textbf{defining player skill}} \label{definePlayerSkill} \hfill \\
+        In investigating how player characteristics vary with player skill, we must first define what player skill is.
+        This is difficult to define since not all players are playing with the same objective. Some players aim merely to complete the field, some players are aiming for speed, or some might be aiming to work on their technique rather than speed or even completion.
+        By proportion, however, most players are aiming for solve time so our skill metric will be tailored as such.
+        For a given player, we look at their percentage improvement with respect to the average time for a given field, and average this across all fields. This aims to factor out different fields that take different times to solve by their nature (\textit{e.g.} because they only take 2 clicks to solve).
+    
+    \subsubsection{Actual Experimental Results}
+        In Minesweeper field evaluation, the 3 core metrics we decided to look at (average solve time, summed RAC difficulty, summed typical cell reward) are listed below in \ref{tab:fieldCoreStatistics}.
+        Further below in \ref{tab:fieldCoreStatisticsPearson} is listed the Pearson correlation matrix between these variables.
+        
+        Our values claim 3BV has a moderately strong positive correlation with solve time, a very strong positive correlation with summed RAC difficulty, and a strong negative correlation with summed cell value.
+        \todo{mention the p-values being < 0.05}
+        The correlation between solve time and difficulty is as-expected and logical. The correlation between 3BV and difficulty/solveTime is initially surprising considering the doubt held by the Minesweeper community \todo{get a citation} on the correctness of 3BV, but our observation here is not generalisable to all minesweeper fields, since we have only considered one field for each of the 3BV scores selected for study.
+        
+        While this experiment design may theoretically be able to find Minesweeper fields with the same solve time but drastically different 3BV scores, it does not observe any fields with the same 3BV but drastically different solve times.
+        
+        it's also unknown how many participants were past the beginner phase and actively aiming for solve time rather than simply solving,
+        however the criticism of 3BV only comes from players aiming to improve their solve time with respect to a specific difficulty, hence this dataset may not have playthroughs from the relevant audience and may not be able to deny the presence of a correlation.
+        
+        
+        
+        \begin{table}
+        \footnotesize
+        \begin{tabular}{llll}
+        \toprule
+            field 3BV & avg. solve time & summed RAC difficulty & summed typical cell reward \\
+        \midrule
+            % 14 &  29.08490 &  25.682927 &  36.257209 \\
+             2 &   1.11 &   5.09 &  65.52 \\
+             5 &  10.43 &   9.94 &  50.13 \\
+             7 &  17.13 &  13.65 &  56.09 \\
+             8 &  18.12 &   9.60 &  59.69 \\
+             9 &  19.75 &  10.74 &  54.16 \\
+            10 &  24.25 &   9.77 &  52.78 \\
+            11 &  25.06 &  19.00 &  44.11 \\
+            12 &  26.10 &  19.33 &  37.50 \\
+            13 &  15.16 &  18.33 &  36.09 \\
+            14 &  29.08 &  25.68 &  36.26 \\
+            15 &  30.15 &  15.21 &  48.60 \\
+            16 &  31.03 &  11.87 &  56.06 \\
+            17 &  41.70 &  22.77 &  38.27 \\
+            18 &  34.90 &  14.60 &  46.47 \\
+            19 &  32.94 &  21.30 &  35.51 \\
+            20 &  50.32 &  18.44 &  31.97 \\
+            22 &  56.78 &  21.59 &  39.48 \\
+            26 &  41.02 &  35.83 &  32.43 \\
+            30 &  27.81 &  31.00 &  29.83 \\
+            35 &  46.15 &  35.50 &  25.94 \\
+            40 &  52.32 &  38.18 &  30.09 \\
+        \bottomrule
+        \end{tabular}
+        \caption{Measured core field statistics.}
+        \label{tab:fieldCoreStatistics}
+        \end{table}
+        
+        \begin{table}[ht]
+        \begin{tabular}{ccccc}
+            % timeSolve & \textcolor{cor-very-strong}{1.0} & \textcolor{cor-strong}{0.79} & \textcolor{cor-strong}{0.68} & \textcolor{cor-very-weak}{-0.69}\\ \hline 
+            % & timeSolve & 3BV & difficulty & cellReward\\ \hline 
+            % 3BV &  & \textcolor{cor-very-strong}{1.0} & \textcolor{cor-very-strong}{0.9} & \textcolor{cor-very-weak}{-0.8}\\ \hline 
+            % difficulty &  &  & \textcolor{cor-very-strong}{1.0} & \textcolor{cor-very-weak}{-0.88}\\ \hline 
+            % cellReward &  &  &  & \textcolor{cor-very-strong}{1.0}\\ \hline
+        
+            % & 3BV & timeSolve & difficulty & cellReward\\ \hline 
+            % 3BV & \textcolor{cor-very-strong}{1.0} & \textcolor{cor-strong}{0.79} & \textcolor{cor-very-strong}{0.9} & \textcolor{cor-very-weak}{-0.8}\\ \hline 
+            % timeSolve &  & \textcolor{cor-very-strong}{1.0} & \textcolor{cor-strong}{0.68} & \textcolor{cor-very-weak}{-0.69}\\ \hline 
+            % difficulty &  &  & \textcolor{cor-very-strong}{1.0} & \textcolor{cor-very-weak}{-0.88}\\ \hline 
+            % cellReward &  &  &  & \textcolor{cor-very-strong}{1.0}\\ \hline 
+        
+            & 3BV & timeSolve & difficulty & cellReward\\ \hline 
+            3BV & \textcolor{pos-cor-very-strong}{1.0} & \textcolor{pos-cor-strong}{0.79} & \textcolor{pos-cor-very-strong}{0.9} & \textcolor{neg-cor-strong}{-0.8}\\ \hline 
+            timeSolve &  & \textcolor{pos-cor-very-strong}{1.0} & \textcolor{pos-cor-strong}{0.68} & \textcolor{neg-cor-strong}{-0.69}\\ \hline 
+            difficulty &  &  & \textcolor{pos-cor-very-strong}{1.0} & \textcolor{neg-cor-very-strong}{-0.88}\\ \hline 
+            cellReward &  &  &  & \textcolor{pos-cor-very-strong}{1.0}\\ \hline 
+        \end{tabular}
+        \caption{Pearson correlations between core field statistics}
+        \label{tab:fieldCoreStatisticsPearson}
+        \end{table}
+        
+        % \hfill \\ \\ \\
+        % Our results are summarized in~\cref{tab:table1}, and a visual representation of
+        % our analysis can be seen in~\cref{fig:basicPatterns}.
+        
+        % %% Example of table
+        % \begin{table}
+        % \footnotesize
+        % \begin{tabular}{lll}
+        % \toprule
+        %          & machine A                   & machine B                           \\
+        % \midrule
+        % CPU      & Intel Core i7-9700 CPU      & 2x Intel Xeon E5-2630 v3            \\
+        % CPU Frequency& 3.00GHz                     & 2.40GHz                             \\
+        % RAM      & 16GB DDR4                   & 128GB                               \\
+        % OS       & Ubuntu 20.04 LTS            & Ubuntu 16.04 LTS                    \\
+        % Compiler & GCC 9.3                     & GCC 7.3                             \\
+        % libm     & v2.31                       & v2.23                               \\
+        % libomp   & v4.5                        & v4.5                                \\
+        % \bottomrule
+        % \end{tabular}
+        % \caption{This is the table caption.}
+        % \label{tab:table1}
+        % \end{table}

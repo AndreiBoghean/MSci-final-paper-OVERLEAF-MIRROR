@@ -1,0 +1,200 @@
+\documentclass[sigconf,nonacm,screen]{acmart}
+\settopmatter{printfolios=true}
+\geometry{a4paper}
+
+%% PACKAGES %%
+\usepackage[utf8]{inputenc}
+\usepackage{microtype}
+\usepackage[capitalise,nameinlink,noabbrev]{cleveref}
+\usepackage{tikz}
+\usepackage{subcaption}
+
+\usepackage{natbib}
+
+\usepackage[dvipsnames]{xcolor}
+\usepackage[svgnames]{xcolor}
+
+
+% random stuff for the coloured pearson corelation table
+\usepackage[dvipsnames]{xcolor}
+\usepackage[underline=true,rounded corners=false]{pgf-umlsd}
+
+% \definecolor{pos-cor-very-weak}{HTML}  {FF0000}
+% \definecolor{pos-cor-weak}{HTML}       {E3001C}
+% \definecolor{pos-cor-moderate}{HTML}   {C60039}
+% \definecolor{pos-cor-strong}{HTML}     {AA0055}
+% \definecolor{pos-cor-very-strong}{HTML}{8E0071}
+% \definecolor{neg-cor-very-weak}{HTML}  {71008E}
+% \definecolor{neg-cor-weak}{HTML}       {5500AA}
+% \definecolor{neg-cor-moderate}{HTML}   {3900C6}
+% \definecolor{neg-cor-strong}{HTML}     {1C00E3}
+% \definecolor{neg-cor-very-strong}{HTML}{0000FF}
+
+\definecolor{pos-cor-very-weak}{HTML}  {FFFF00}
+\definecolor{pos-cor-weak}{HTML}       {FFBF00}
+\definecolor{pos-cor-moderate}{HTML}   {FF8000}
+\definecolor{pos-cor-strong}{HTML}     {FF4000}
+\definecolor{pos-cor-very-strong}{HTML}{FF0000}
+
+\definecolor{neg-cor-very-weak}{HTML}  {00FFD0}
+\definecolor{neg-cor-weak}{HTML}       {00BFDC}
+\definecolor{neg-cor-moderate}{HTML}   {0080E8}
+\definecolor{neg-cor-strong}{HTML}     {0040F3}
+\definecolor{neg-cor-very-strong}{HTML}{0000FF}
+
+\newcommand{\hcancel}[1]{%
+    \tikz[baseline=(tocancel.base)]{
+        \node[inner sep=0pt,outer sep=0pt] (tocancel) {#1};
+        \draw[line width=0.5mm, black] (tocancel.south west) -- (tocancel.north east);
+    }%
+}%
+
+
+
+% bring back the TODO command
+\usepackage{soul}
+\newcommand{\todo}[1]{ \large \sethlcolor{yellow} \hl{todo: |#1|}\PackageWarning{TODO:}{#1!} \normalsize }
+\newcommand{\todoR}[1]{ \large \sethlcolor{red} \hl{todoR: |#1|}\PackageWarning{TODO:}{#1!} \normalsize }
+\newcommand{\todoG}[1]{ \large \sethlcolor{green} \hl{todoG: |#1|}\PackageWarning{TODO:}{#1!} \normalsize }
+
+\newcommand{\todoPi}[1]{ \large \sethlcolor{HotPink} \hl{todoPi: |#1|}\PackageWarning{TODO:}{#1!} \normalsize }
+
+\newcommand{\todoB}[1]{ \large \sethlcolor{blue} \hl{todoB: |#1|}\PackageWarning{TODO:}{#1!} \normalsize }
+\newcommand{\todoC}[1]{ \large \sethlcolor{cyan} \hl{todoC: |#1|}\PackageWarning{TODO:}{#1!} \normalsize }
+\newcommand{\todoBB}[1]{ \large \sethlcolor{LightSkyBlue} \hl{todoBB: |#1|}\PackageWarning{TODO:}{#1!} \normalsize }
+\newcommand{\todoBA}[1]{ \large \sethlcolor{Aquamarine} \hl{todoBA: |#1|}\PackageWarning{TODO:}{#1!} \normalsize }
+
+\newcommand{\todoLg}[1]{ \large \sethlcolor{lightgray} \hl{todoLg: |#1|}\PackageWarning{TODO:}{#1!} \normalsize }
+
+
+\newcommand{\todoP}[1]{ \large \sethlcolor{pink} \hl{todoP: |#1|}\PackageWarning{TODO:}{#1!} \normalsize }
+
+\newcommand{\todoOl}[1]{ \large \sethlcolor{olive} \hl{todoOl: |#1|}\PackageWarning{TODO:}{#1!} \normalsize }
+\newcommand{\todoBr}[1]{ \large \sethlcolor{Brown} \hl{todoBr: |#1|}\PackageWarning{TODO:}{#1!} \normalsize }
+\newcommand{\todoOr}[1]{ \large \sethlcolor{orange} \hl{todoOr: |#1|}\PackageWarning{TODO:}{#1!} \normalsize }
+\newcommand{\todoLi}[1]{ \large \sethlcolor{lime} \hl{todoLi: |#1|}\PackageWarning{TODO:}{#1!} \normalsize }
+\newcommand{\todoPl}[1]{ \large \sethlcolor{Plum} \hl{todoPl: |#1|}\PackageWarning{TODO:}{#1!} \normalsize }
+
+
+\newcommand{\paniktodo}[1]{ \normalfont }
+
+% make subsubsection act like a regular section
+\usepackage{titlesec}
+\titleformat{\subsubsection}{\normalfont\Large\bfseries}{\thesubsubsection}{1em}{}
+
+% exile over/underfull hbox warnings
+\hbadness=99999
+\vbadness=99999
+\hfuzz=9999pt
+
+% % % % % % % % % % % % % % % % % % % % %
+%          STUDENT INFORMATION 
+% % % % % % % % % % % % % % % % % % % % %
+% \title{Relating Constraint Programming Techniques to Minesweeper Difficulty}
+\title{Empirically Investigating Minesweeper Field Difficulty with Constraint Programming Techniques}
+
+\author{Andrei Boghean} %% ENTER YOUR NAME HERE!!!
+\affiliation{
+  \country{2645295b} %% ENTER YOUR MATRICULATION NUMBER HERE!!!
+}
+
+
+%% DOCUMENT %%
+
+\begin{document}
+% % % % % % % % % % % % % % % % % % % % %
+% 			ABSTRACT
+% % % % % % % % % % % % % % % % % % % % %
+
+\input{deletable_notes}
+
+\begin{abstract}
+
+Minesweeper is an NP-complete puzzle game whose random board generation can yield very different boards with drastically different solve difficulties, even within the same fixed board parameters, despite the simplicity of board generation.
+
+Due to the unpredictability of this variance, there does not currently exist a difficulty metric that can capture it. Instead, players rely on metrics such as solve time and minimum clicks necessary, which are believed to be insufficiently representative.
+
+This project studies factors contributing to the perceived field difficulty, including both player skill and field challenge,
+to aid the creation of a more accurate difficulty metric for randomised minesweeper fields with fixed sizes and mine counts.
+
+By looking at minesweeper as a constraint satisfaction problem, we can use well-established algorithms to objectively categorise the difficulty of different minesweeper moves, and subsequently apply this to both the moves needed to solve a board and the moves used by a player, in an effort to understand how the appearance of these different moves ultimately affects the time to solve the board.
+
+The results of our experiment shows that CP techniques can directly estimate the solve time for a minesweeper playthrough from the computed logical complexity, but can not do so without processing the logical complexity from playthrough data, which defeats the purpose in its current state.
+Our experiment also yields results that contradict the widely believed opinion that field difficulty isn't generally easily predictable, A conclusion which we believe isn't generalisable beyond our collected dataset due to insufficient data.
+
+% 3BV has a strong positive correlation with solve time and logical difficulty, additionally having a strong negative correlation with the typical "reward" of a cell, correlations which contradict the widely believed opinion that 3BV is not representative of field difficulty.
+
+Ultimately, we conclude that individual or even collected move difficulty is not the sole factor in a field's difficulty, but is a contributing factor that needs to be considered over many playthroughs, ideally every playthrough route possible on the field.
+With this conclusion we also propose ideas for future work in enumerating all possible playthroughs of a field in a non-exhaustive but practically equivalent manner.
+
+% Ultimately, we conclude that "harder" minesweeper fields are fields which place more importance on the path taken through a field by having path bottlenecks, where easier fields have no bottlenecks and can be solved by ignoring difficult sections until an alternative path is found.
+
+% Our experiments are able to support some simple conclusions about player skill,
+% and find that there is in fact a strong correlation between 3BV and time to solve, but can not definitively prove a correlation between 3BV and solve time across all possible minesweeper fields, since the experiment did not consider a broad enough selection of fields to allow this conclusion.
+\todo{move some stuff to introduction}
+
+% - as far as research into player skill goes, we did in fact make some surface level discoveries
+% - as far as research into board analysis goes, we found that there's
+%   a correlation between 3BV, field solve time, and field difficulty.
+%   this is contradictory to what we would expect, as the author indicates 3BV is not in fact representative of difficulty.
+%   reasons my experiment is flawed: only one 3bv score, small map size, small sample size, not trawling whole 3bv range.
+
+
+% \todo{finish writing}
+% Ultimately, we find that I dont have skill nor time to do this topic justice :(
+
+% \todo{rewrite below}
+% Minesweeper is NP-complete. as a fact of this, there are a variety of different algorithms that implement both non-exhaustive heuristics and full solutions for solving minesweeper. out of CP algorithms, relational arc consitency is the most practically applicable, and indeed this paper demonstrates RAC on a minesweeper field. from this paper, it can be seen that RAC with different parameters corespond to different moves of different difficulties.
+
+% we can apply this to human playthroughs to learn what levels of difficulties different players are familar with \todoC{humans have an incomplete subset of perfect knowledge},
+% and can then also apply this to minesweeper fields to learn what difficulties arise in the field. \todoBB{insert research about minesweeper clusters} \todoC{also some new research in this area?}
+
+% combining this knowledge, we could subsequently reason about how well-equiped a human is with respect to a minesweeper field (see \todoC{elo}, something first poked at by \citet{whyArePuzzlesFun})
+% however I dont have the data for that
+\end{abstract}
+
+%%%%%%%%%%%% DO NOT EDIT THIS PART!!! %%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\maketitle
+\tikz [remember picture, overlay] %
+\node [shift={(0.5cm,-0.5cm)}] at (current page.north west) %
+[anchor=north west,scale=0.7] %
+{\includegraphics{embeddables/CompSci_logo.pdf}};
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\input{0_introduction}
+
+\input{1_background}
+
+% % % % % % % % % % % % % % % % % % % % %
+% 			YOUR SYSTEM
+% % % % % % % % % % % % % % % % % % % % %
+\section{Project "Design"}
+\label{sec:design}
+\input{2_design}
+
+% % % % % % % % % % % % % % % % % % % % %
+% 			EVALUATION
+% % % % % % % % % % % % % % % % % % % % %
+\section{Evaluation}
+\label{sec:evaluation}
+\input{3_evaluation}
+
+% % % % % % % % % % % % % % % % % % % % %
+%    CONCLUSIONS and FUTURE WORK
+% % % % % % % % % % % % % % % % % % % % %
+\input{4_postamble}
+
+% % % % % % % % % % % % % % % % % % % % %
+% 			ACKNOWLEDGMENTS
+% % % % % % % % % % % % % % % % % % % % %
+\section*{Acknowledgments}
+I would like to thank caffeine.
+
+% % % % % % % % % % % % % % % % % % % % %
+% 			BIBLIOGRAPHY
+% % % % % % % % % % % % % % % % % % % % %
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{refs}
+\end{document}

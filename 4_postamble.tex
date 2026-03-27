@@ -1,0 +1,23 @@
+\section{Conclusions (0.5 page)}
+\label{sec:conclusions}
+In conclusion, Minesweeper is cool.
+
+\section{Future Work (0.5 page)}
+\label{sec:future_work}
+basically: do the project again, but bigger and more.
+more minesweeper fields across a wider range of the 3bv spectrum \\
+more minesweeper fields among the same 3bv value. \\
+
+$RAC_{(i, m)}$ only separates minesweeper moves as far as the number of constraints $m$  and number of variables $i$ needed to consider for a pattern to be recognised (recall that Generalised Arc Consistency is given by $RAC_{(1,1)}$, whereas $RC_2$ and $RC_3$ use an unbounded i, effectively meaning only the number of constraints is relevant beyond GAC). Within the same number of constraints, e.g. $RAC_1$ therefore, different types of moves that use the same difficulty but are a different pattern are treated as the same by us.
+Future work then should modify Relational Arc Consistency with a form of proof logging, to assert which kind of pattern was used to make a conclusion about a cell. this information can then be used to record what specific type of patterns a person knows and is able to use, and ultimately build a better understanding of their capability to play minesweeper.
+\\ \\
+use larger values for RAC. also, track guesses.
+\\ \\
+I build statistics on a minesweeper field, e.g. the typical difficulty for a cell,
+by looking at many playthroughs and storing the difficulty of the cell as sampled by the players, at the moment they clicked the cell, during their playthroughs.
+effectively, I'm using the player playthroughs as exploration of the board
+instead of carrying out exploration myself
+because I dont want to create an algorithm for exploring the board.
+
+currently, I substitute trying every single possible way to solve the board and use player playthroughs instead.
+I then build statistics from that.
